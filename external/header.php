@@ -128,9 +128,6 @@ register_shutdown_function(
             session_write_close();
         }
         flush();
-        if (function_exists('fastcgi_finish_request')) {
-            fastcgi_finish_request();
-        }
 
         if (!defined('XHGUI_ROOT_DIR')) {
             require dirname(dirname(__FILE__)) . '/src/bootstrap.php';
