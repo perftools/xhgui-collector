@@ -170,15 +170,25 @@ register_shutdown_function(
         }
 
         $data['meta'] = array(
-            'url' => $uri,
-            'SERVER' => $_SERVER,
-            'get' => $_GET,
-            'env' => $_ENV,
-            'simple_url' => Xhgui_Util::simpleUrl($uri),
-            'request_ts' => $requestTs,
-            'request_ts_micro' => $requestTsMicro,
-            'request_date' => date('Y-m-d', $time),
+            'url'               => $uri,
+            'SERVER'            => $_SERVER,
+            'get'               => $_GET,
+            'env'               => $_ENV,
+            'simple_url'        => Xhgui_Util::simpleUrl($uri),
+            'request_ts'        => $requestTs,
+            'request_ts_micro'  => $requestTsMicro,
+            'request_date'      => date('Y-m-d', $time),
         );
+
+        // add additional information to saved profile data - for example db queries or similar
+        if (Xhgui_Config::read('additional_data', false) !== false) {
+            $data['meta']['additional_data'] = array();
+            foreach(Xhgui_Config::read('additional_data', array()) as $globalName) {
+                if (isset($GLOBALS[$globalName])) {
+                    $data['meta']['additional_data'] = $GLOBALS[$globalName];
+                }
+            }
+        }
 
         try {
             $config = Xhgui_Config::all();

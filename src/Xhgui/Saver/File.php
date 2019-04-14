@@ -2,16 +2,46 @@
 
 class Xhgui_Saver_File implements Xhgui_Saver_Interface
 {
-    private $_file;
+    /**
+     * @var string
+     */
+    private $file;
 
-    public function __construct($file)
+    /**
+     * @var bool
+     */
+    private $separateMeta;
+
+    /**
+     * Xhgui_Saver_File constructor.
+     * @param $file
+     * @param bool $separateMeta
+     */
+    public function __construct($file, $separateMeta = false)
     {
-        $this->_file = $file;
+        $this->file             = $file;
+        $this->separateMeta     = $separateMeta;
     }
 
+    /**
+     * @param array $data
+     * @return bool|int
+     */
     public function save(array $data)
     {
-        $json = json_encode($data);
-        return file_put_contents($this->_file, $json.PHP_EOL, FILE_APPEND);
+        if ($this->separateMeta) {
+            $profiles           = Xhgui_Util::getDataForStorage($data['profiles']);
+
+            // store summary in separate meta file to speed up aggregation
+            $meta['summary']    = $data['profiles']['main()'];
+            $meta               = Xhgui_Util::getDataForStorage($data['meta']);
+
+            file_put_contents($this->file.'.meta',$meta.PHP_EOL, FILE_APPEND);
+
+            return file_put_contents($this->file,$profiles.PHP_EOL, FILE_APPEND);
+        }
+
+        $json = Xhgui_Util::getDataForStorage($data);
+        return file_put_contents($this->file, $json.PHP_EOL, FILE_APPEND);
     }
 }

@@ -3,20 +3,30 @@
  * Default configuration for Xhgui
  */
 
-$mongoUri = getenv('XHGUI_MONGO_URI') ?: '127.0.0.1:27017';
-$mongoUri = str_replace('mongodb://', '', $mongoUri);
-$mongoDb = getenv('XHGUI_MONGO_DB') ?: 'xhprof';
+$mongoUri   = getenv('XHGUI_MONGO_URI') ?: '127.0.0.1:27017';
+$mongoUri   = str_replace('mongodb://', '', $mongoUri);
+$mongoDb    = getenv('XHGUI_MONGO_DB') ?: 'xhprof';
 
 return array(
-    'debug' => false,
-    'mode' => 'development',
+    'debug'     => false,
+    'mode'      => 'development',
 
     // Can be mongodb, file or upload.
 
     // For file
     //
-    //'save.handler' => 'file',
-    //'save.handler.filename' => dirname(__DIR__) . '/cache/' . 'xhgui.data.' . microtime(true) . '_' . substr(md5($url), 0, 6),
+    //'save.handler'                    => 'file',
+    //'save.handler.filename'           => dirname(__DIR__) . '/cache/' . 'xhgui.data.' . microtime(true) . '_' . substr(md5($url), 0, 6),
+    //'save.handler.separate_meta'      => false,
+
+    // serialize handler for all compatible data: json, serialize, igbinary. This affects only serialization to files
+    // because mongo handler and db handlers use json for native database support. Defaults to json
+    // 'save.handler.serializer'        => 'json',
+
+    // to make output compatible with old xhprof gui set
+    //      save.handler.serializer     to serialize,
+    //      save.handler.separate_meta  to true
+    //      save.handler.filename       to dirname(__DIR__).'/cache/' . \Xhgui_Util::getXHProfFileName . '.data.xhprof'
 
     // For upload
     //
@@ -25,22 +35,25 @@ return array(
     //
     // The timeout option is in seconds and defaults to 3 if unspecified.
     //
-    //'save.handler' => 'upload',
-    //'save.handler.upload.uri' => 'https://example.com/run/import',
+    //'save.handler'                => 'upload',
+    //'save.handler.upload.uri'     => 'https://example.com/run/import',
     //'save.handler.upload.timeout' => 3,
 
     // For MongoDB
-    'save.handler' => 'mongodb',
-    'db.host' => sprintf('mongodb://%s', $mongoUri),
-    'db.db' => $mongoDb,
+    'save.handler'  => 'mongodb',
+    'db.host'       => sprintf('mongodb://%s', $mongoUri),
+    'db.db'         => $mongoDb,
 
     // Allows you to pass additional options like replicaSet to MongoClient.
     // 'username', 'password' and 'db' (where the user is added)
-    'db.options' => array(),
-    'templates.path' => dirname(__DIR__) . '/src/templates',
-    'date.format' => 'M jS H:i:s',
-    'detail.count' => 6,
-    'page.limit' => 25,
+    'db.options'        => array(),
+    'templates.path'    => dirname(__DIR__) . '/src/templates',
+    'date.format'       => 'M jS H:i:s',
+    'detail.count'      => 6,
+    'page.limit'        => 25,
+
+    // store extra data in profile information, for example information about db queries
+    //'additional_data'    => ['DB_PROFILE']
 
     // call fastcgi_finish_request() in shutdown handler
     'fastcgi_finish_request' => true,

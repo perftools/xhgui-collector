@@ -12,13 +12,14 @@ class Xhgui_Saver
      *
      * @param array $config The configuration data.
      * @return Xhgui_Saver_File|Xhgui_Saver_Mongo|Xhgui_Saver_Upload
+     * @throws MongoConnectionException
      */
     public static function factory($config)
     {
         switch ($config['save.handler']) {
 
             case 'file':
-                return new Xhgui_Saver_File($config['save.handler.filename']);
+                return new Xhgui_Saver_File($config['save.handler.filename'], $config['save.handler.separate_meta']);
 
             case 'upload':
                 $timeout = 3;
