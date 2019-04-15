@@ -32,9 +32,11 @@ class Xhgui_Saver_File implements Xhgui_Saver_Interface
         if ($this->separateMeta) {
             $profiles           = Xhgui_Util::getDataForStorage($data['profile']);
 
+            $meta               = $data['meta'];
+
             // store summary in separate meta file to speed up aggregation
             $meta['summary']    = $data['profile']['main()'];
-            $meta               = Xhgui_Util::getDataForStorage($data['meta']);
+            $meta               = Xhgui_Util::getDataForStorage($meta);
 
             file_put_contents($this->file.'.meta',$meta.PHP_EOL, FILE_APPEND);
 
