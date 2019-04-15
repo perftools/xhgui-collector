@@ -16,7 +16,7 @@ return array(
     // For file
     //
     //'save.handler'                    => 'file',
-    //'save.handler.filename'           => dirname(__DIR__) . '/cache/' . 'xhgui.data.' . microtime(true) . '_' . substr(md5($url), 0, 6),
+    //'save.handler.filename'           => dirname(__DIR__) . '/cache/' . 'xhgui.data.' . microtime(true) . '_' . substr(md5($_SERVER['REQUEST_URI']), 0, 6),
     //'save.handler.separate_meta'      => false,
 
     // serialize handler for all compatible data: json, serialize, igbinary. This affects only serialization to files

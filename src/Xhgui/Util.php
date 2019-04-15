@@ -38,7 +38,7 @@ class Xhgui_Util
      * @return false|string
      */
     public static function getDataForStorage($data) {
-        switch (Xhgui_Config::read('additional_data', 'json')) {
+        switch (Xhgui_Config::read('save.handler.serializer', 'json')) {
             case 'json':
                 return json_encode($data);
                 break;
