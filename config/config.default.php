@@ -40,9 +40,13 @@ return array(
     //'save.handler.upload.timeout' => 3,
 
     // For MongoDB
-    'save.handler'  => 'mongodb',
-    'db.host'       => sprintf('mongodb://%s', $mongoUri),
-    'db.db'         => $mongoDb,
+//    'save.handler'  => 'mongodb',
+//    'db.host'       => sprintf('mongodb://%s', $mongoUri),
+//    'db.db'         => $mongoDb,
+
+    // for pdo
+    'save.handler'  => 'pdo',
+    'db.dsn'        => 'sqlite:/home/grzegorz/web/test.sq3',
 
     // Allows you to pass additional options like replicaSet to MongoClient.
     // 'username', 'password' and 'db' (where the user is added)

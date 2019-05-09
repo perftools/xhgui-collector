@@ -178,6 +178,11 @@ register_shutdown_function(
             'request_ts'        => $requestTs,
             'request_ts_micro'  => $requestTsMicro,
             'request_date'      => date('Y-m-d', $time),
+            'application'       => !empty($GLOBALS['xhgui']['application']) ?: null,
+            'version'           => !empty($GLOBALS['xhgui']['version'])     ?: null,
+            'branch'            => !empty($GLOBALS['xhgui']['branch'])      ?: null,
+            'controller'        => !empty($GLOBALS['xhgui']['controller'])  ?: null,
+            'action'            => !empty($GLOBALS['xhgui']['action'])      ?: null,
         );
 
         // add additional information to saved profile data - for example db queries or similar

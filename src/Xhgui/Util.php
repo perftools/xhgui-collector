@@ -51,6 +51,11 @@ class Xhgui_Util
             case 'igbinary':
                 return igbinary_serialize($data);
                 break;
+
+            case 'php':
+            case 'var_export':
+                return var_export($data, true);
+                break;
         }
     }
 
@@ -76,6 +81,11 @@ class Xhgui_Util
             case 'igbinary_unserialize':
             case 'igbinary':
                 return igbinary_unserialize($data);
+                break;
+
+            case 'php':
+            case 'var_export':
+                //@todo exception ?
                 break;
         }
     }
