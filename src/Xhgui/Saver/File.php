@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * File saving handler
+ */
 class Xhgui_Saver_File implements Xhgui_Saver_Interface
 {
     /**

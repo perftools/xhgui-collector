@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Common utilities
+ */
 class Xhgui_Util
 {
     /**
@@ -23,7 +26,8 @@ class Xhgui_Util
     /**
      * @return string
      */
-    public static function getXHProfFileName(){
+    public static function getXHProfFileName()
+    {
         if (empty($_SERVER['REQUEST_TIME_FLOAT'])) {
             $t = explode('.', microtime(true));
         } else {
@@ -34,10 +38,13 @@ class Xhgui_Util
     }
 
     /**
+     * Serialize data for storage
+     *
      * @param $data
      * @return false|string
      */
-    public static function getDataForStorage($data) {
+    public static function getDataForStorage($data)
+    {
         switch (Xhgui_Config::read('save.handler.serializer', 'json')) {
             case 'json':
                 return json_encode($data);
@@ -63,7 +70,8 @@ class Xhgui_Util
      * @param $data
      * @return false|string
      */
-    public static function getDataFromStorage($data) {
+    public static function getDataFromStorage($data)
+    {
         switch (Xhgui_Config::read('save.handler.serializer', 'json')) {
             case 'json':
                 return json_decode($data, true);
@@ -88,5 +96,44 @@ class Xhgui_Util
                 //@todo exception ?
                 break;
         }
+    }
+
+    /**
+     * Get id for a record.
+     *
+     * By default this method will try to re-use request id from http server.
+     * This is needed for some storage engines that don't have string/hashlike id generation.
+     *
+     * @param bool $useRequestId
+     *
+     * @return string
+     */
+    public static function getId($useRequestId = true)
+    {
+        if ($useRequestId) {
+            foreach(['REQUEST_ID', 'HTTP_REQUEST_ID', 'HTTP_X_REQUEST_ID', 'X_CORRELATION_ID', 'HTTP_X_CORRELATION_ID'] as $header) {
+                if (array_key_exists($header, $_SERVER) !== false) {
+                    return $_SERVER[$header];
+                }
+            }
+        }
+
+        // try php 7+ function.
+        if (function_exists('random_bytes')) {
+            try {
+                return bin2hex(random_bytes(16));
+            } catch (\Exception $e) {
+                // entropy source is not available
+            }
+        }
+
+        // try openssl. For purpose of this id we can ignore info if this value is strong or not
+        if (function_exists('openssl_random_pseudo_bytes')) {
+            /** @noinspection CryptographicallySecureRandomnessInspection */
+            return openssl_random_pseudo_bytes(32, $strong);
+        }
+
+        // fallback to most generic method. Make sure it has 32 characters :)
+        return md5(uniqid('xhgui', true).microtime());
     }
 }

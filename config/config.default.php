@@ -3,33 +3,28 @@
  * Default configuration for Xhgui
  */
 
-$mongoUri   = getenv('XHGUI_MONGO_URI') ?: '127.0.0.1:27017';
-$mongoUri   = str_replace('mongodb://', '', $mongoUri);
-$mongoDb    = getenv('XHGUI_MONGO_DB') ?: 'xhprof';
-
 return array(
     'debug'     => false,
     'mode'      => 'development',
 
-    // Can be mongodb, file or upload.
+    // Can be mongodb, file, upload or pdo.
 
     // For file
-    //
     //'save.handler'                    => 'file',
     //'save.handler.filename'           => dirname(__DIR__) . '/cache/' . 'xhgui.data.' . microtime(true) . '_' . substr(md5($_SERVER['REQUEST_URI']), 0, 6),
     //'save.handler.separate_meta'      => false,
 
     // serialize handler for all compatible data: json, serialize, igbinary. This affects only serialization to files
     // because mongo handler and db handlers use json for native database support. Defaults to json
-    // 'save.handler.serializer'        => 'json',
+    //'save.handler.serializer'        => 'json',
 
     // to make output compatible with old xhprof gui set
     //      save.handler.serializer     to serialize,
     //      save.handler.separate_meta  to true
     //      save.handler.filename       to dirname(__DIR__).'/cache/' . \Xhgui_Util::getXHProfFileName . '.data.xhprof'
 
+
     // For upload
-    //
     // Saving profile data by upload is only recommended with HTTPS
     // endpoints that have IP whitelists applied.
     //
@@ -39,22 +34,24 @@ return array(
     //'save.handler.upload.uri'     => 'https://example.com/run/import',
     //'save.handler.upload.timeout' => 3,
 
+
     // For MongoDB
-//    'save.handler'  => 'mongodb',
-//    'db.host'       => sprintf('mongodb://%s', $mongoUri),
-//    'db.db'         => $mongoDb,
+    //'save.handler'  => 'mongodb',
+    //'db.host'       => 'mongodb://127.0.0.1:27017',
+    //'db.db'         => getenv('XHGUI_MONGO_DB') ?: 'xhprof',
 
-    // for pdo
-    'save.handler'  => 'pdo',
-    'db.dsn'        => 'sqlite:/home/grzegorz/web/test.sq3',
 
-    // Allows you to pass additional options like replicaSet to MongoClient.
-    // 'username', 'password' and 'db' (where the user is added)
+    // for PDO
+    //'save.handler'  => 'pdo',
+    //'db.dsn'        => 'sqlite:/var/www/web/test.sq3',
+
+
+    // authentication for db (for both pdo AND mongo)
+    //'db.user'       => '',
+    //'db.password'   => '',
+
+    // Allows you to pass additional options like replicaSet to MongoClient or pdo settings.
     'db.options'        => array(),
-    'templates.path'    => dirname(__DIR__) . '/src/templates',
-    'date.format'       => 'M jS H:i:s',
-    'detail.count'      => 6,
-    'page.limit'        => 25,
 
     // store extra data in profile information, for example information about db queries
     //'additional_data'    => ['DB_PROFILE']
@@ -77,5 +74,13 @@ return array(
     //    return str_replace('token', '', $url);
     //},
 
+    // Options passed to (uprofiler|tideways|xhprof)_enable. Mainly ignored_functions list
     'profiler.options' => array(),
+
+
+    // UI related settings
+    'templates.path'    => dirname(__DIR__) . '/src/templates',
+    'date.format'       => 'M jS H:i:s',
+    'detail.count'      => 6,
+    'page.limit'        => 25,
 );

@@ -4,6 +4,9 @@
  */
 class Xhgui_Config
 {
+    /**
+     * @var array
+     */
     private static $_config = array();
 
     /**

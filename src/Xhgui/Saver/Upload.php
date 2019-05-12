@@ -1,16 +1,37 @@
 <?php
 
+/**
+ * Upload handler
+ */
 class Xhgui_Saver_Upload implements Xhgui_Saver_Interface
 {
+    /**
+     * @var string
+     */
+    protected $uri;
 
-    protected $uri, $timeout;
+    /**
+     * @var int
+     */
+    protected $timeout;
 
+    /**
+     * Xhgui_Saver_Upload constructor.
+     *
+     * @param $uri
+     * @param $timeout
+     */
     public function __construct($uri, $timeout)
     {
-        $this->uri = $uri;
-        $this->timeout = $timeout;
+        $this->uri      = $uri;
+        $this->timeout  = $timeout;
     }
 
+    /**
+     * @param array $data
+     *
+     * @return mixed|void
+     */
     public function save(array $data)
     {
         $json = json_encode($data);
