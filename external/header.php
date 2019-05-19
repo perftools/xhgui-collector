@@ -137,7 +137,7 @@ register_shutdown_function(
         }
 
         // store session id before we close it:
-        $sessionId = '';
+        $sessionId = null;
         if (session_status() === PHP_SESSION_ACTIVE) {
             $sessionId = session_id();
         }
@@ -202,6 +202,7 @@ register_shutdown_function(
             'branch'            => !empty($GLOBALS['xhgui']['branch'])      ?: null,
             'controller'        => !empty($GLOBALS['xhgui']['controller'])  ?: null,
             'action'            => !empty($GLOBALS['xhgui']['action'])      ?: null,
+            'cookies'           => $_COOKIE,
         );
 
         // add additional information to saved profile data - for example db queries or similar

@@ -40,12 +40,20 @@ class Xhgui_Util
     /**
      * Serialize data for storage
      *
-     * @param $data
+     * @param      $data
+     * @param bool $profiles
+     *
      * @return false|string
      */
-    public static function getDataForStorage($data)
+    public static function getDataForStorage($data, $profiles = true)
     {
-        switch (Xhgui_Config::read('save.handler.serializer', 'json')) {
+        if ($profiles) {
+            $serializer = Xhgui_Config::read('save.handler.serializer', 'json');
+        } else {
+            $serializer = Xhgui_Config::read('save.handler.meta_serializer', 'php');
+        }
+
+        switch ($serializer) {
             case 'json':
                 return json_encode($data);
                 break;
@@ -61,18 +69,26 @@ class Xhgui_Util
 
             case 'php':
             case 'var_export':
-                return var_export($data, true);
+                return "<?php \n".var_export($data, true);
                 break;
         }
     }
 
     /**
-     * @param $data
+     * @param      $data
+     * @param bool $profiles
+     *
      * @return false|string
      */
-    public static function getDataFromStorage($data)
+    public static function getDataFromStorage($data, $profiles = true)
     {
-        switch (Xhgui_Config::read('save.handler.serializer', 'json')) {
+        if ($profiles) {
+            $serializer = Xhgui_Config::read('save.handler.serializer', 'json');
+        } else {
+            $serializer = Xhgui_Config::read('save.handler.meta_serializer', 'php');
+        }
+
+        switch ($serializer) {
             case 'json':
                 return json_decode($data, true);
                 break;
@@ -91,9 +107,13 @@ class Xhgui_Util
                 return igbinary_unserialize($data);
                 break;
 
+                // this is a path to a file on disk
             case 'php':
             case 'var_export':
-                //@todo exception ?
+                if (file_exists($data) && is_readable($data)) {
+                    return include $data;
+                }
+                throw new \RuntimeException('You must provide path to a file for php data import');
                 break;
         }
     }
@@ -130,7 +150,7 @@ class Xhgui_Util
         // try openssl. For purpose of this id we can ignore info if this value is strong or not
         if (function_exists('openssl_random_pseudo_bytes')) {
             /** @noinspection CryptographicallySecureRandomnessInspection */
-            return openssl_random_pseudo_bytes(32, $strong);
+            return bin2hex(openssl_random_pseudo_bytes(16, $strong));
         }
 
         // fallback to most generic method. Make sure it has 32 characters :)

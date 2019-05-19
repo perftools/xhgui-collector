@@ -53,14 +53,14 @@ class Xhgui_Saver_PDO implements \Xhgui_Saver_Interface {
 
             $infoStatement = $this->connection->prepare('
 insert into profiles_info(
-    id, url, request_time, method, main_ct, main_wt, main_cpu, main_mu, main_pmu, application, version, branch,controller, action 
+    id, url, request_time, method, main_ct, main_wt, main_cpu, main_mu, main_pmu, application, version, branch,controller, action, remote_addr, session_id 
 ) values (
-    :id, :url, :request_time, :method, :main_ct, :main_wt, :main_cpu, :main_mu, :main_pmu, :application, :version, :branch, :controller, :action          
+    :id, :url, :request_time, :method, :main_ct, :main_wt, :main_cpu, :main_mu, :main_pmu, :application, :version, :branch, :controller, :action, :remote_addr, :session_id          
 )');
             $infoStatement->execute([
                 'id'            => $id,
                 'url'           => $data['meta']['simple_url'],
-                'request_time'  => ($requestTime->format('Y-m-d H:i:s.u')),
+                'request_time'  => $requestTime->format('Y-m-d H:i:s.u'),
                 'method'        => (php_sapi_name()==='cli' ? 'CLI' : $_SERVER['REQUEST_METHOD']),
                 'main_ct'       => $data['profile']['main()']['ct'],
                 'main_wt'       => $data['profile']['main()']['wt'],
@@ -71,7 +71,9 @@ insert into profiles_info(
                 'version'       => $data['meta']['version'],
                 'branch'        => $data['meta']['branch'],
                 'controller'    => $data['meta']['controller'],
-                'action'        => $data['meta']['action']
+                'action'        => $data['meta']['action'],
+                'remote_addr'   => !empty($data['meta']['SERVER']['REMOTE_ADDR']) ?: null,
+                'session_id'    => $data['meta']['session_id']
             ]);
             $this->connection->commit();
 

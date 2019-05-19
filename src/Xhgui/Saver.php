@@ -37,8 +37,8 @@ class Xhgui_Saver
             case 'pdo':
                 return new Xhgui_Saver_PDO(
                     $config['db.dsn'],
-                    $config['db.user'],
-                    $config['db.password'],
+                    (!empty($config['db.user'])) ? $config['db.user'] : null,
+                    (!empty($config['db.password'])) ? $config['db.password'] : null,
                     $config['db.options']
                 );
                 break;
@@ -49,8 +49,8 @@ class Xhgui_Saver
                     $config['db.host'],
                     $config['db.options'] +
                     [
-                        'username' => $config['db.user'],
-                        'password' => $config['db.password'],
+                        'username' => (!empty($config['db.user'])) ? $config['db.user'] : null,
+                        'password' => (!empty($config['db.password'])) ? $config['db.password'] : null,
                     ]
                 );
 
