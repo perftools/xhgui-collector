@@ -67,13 +67,13 @@ insert into profiles_info(
                 'main_cpu'      => $data['profile']['main()']['cpu'],
                 'main_mu'       => $data['profile']['main()']['mu'],
                 'main_pmu'      => $data['profile']['main()']['pmu'],
-                'application'   => $data['meta']['application'],
-                'version'       => $data['meta']['version'],
-                'branch'        => $data['meta']['branch'],
-                'controller'    => $data['meta']['controller'],
-                'action'        => $data['meta']['action'],
+                'application'   => !empty($data['meta']['application']) ? $data['meta']['application'] : null,
+                'version'       => !empty($data['meta']['version'])     ? $data['meta']['version'] : null,
+                'branch'        => !empty($data['meta']['branch'])      ? $data['meta']['branch'] : null,
+                'controller'    => !empty($data['meta']['controller'])  ? $data['meta']['controller'] : null,
+                'action'        => !empty($data['meta']['action'])      ? $data['meta']['action'] : null,
+                'session_id'    => !empty($data['meta']['session_id'])  ? $data['meta']['action'] : null,
                 'remote_addr'   => !empty($data['meta']['SERVER']['REMOTE_ADDR']) ?: null,
-                'session_id'    => $data['meta']['session_id']
             ]);
             $this->connection->commit();
 
