@@ -1,5 +1,5 @@
 {
-    "name": "GrzegorzDrozd/xhgui-collector",
+    "name": "grzegorzdrozd/xhgui-collector",
     "description": "Library for collecting and storing XHProf results for later use by XHGUI.",
     "authors": [
         {
