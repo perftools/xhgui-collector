@@ -136,6 +136,7 @@ class Xhgui_Util
         if (!empty($data['id'])) {
             return $data['id'];
         }
+
         // mongo compatibility
         if (!empty($data['_id'])) {
             return $data['_id'];

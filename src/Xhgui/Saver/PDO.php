@@ -39,18 +39,6 @@ class Xhgui_Saver_PDO implements \Xhgui_Saver_Interface {
 
             $requestTime = \DateTime::createFromFormat('U u', $data['meta']['request_ts_micro']['sec'].' '.$data['meta']['request_ts_micro']['usec']);
 
-            $profileStatement = $this->connection->prepare('insert into profiles(profile_id, profiles) VALUES(:id, :profiles)');
-            $profileStatement->execute([
-                'id'        => $id,
-                'profiles'  => json_encode($data['profile']),
-            ]);
-
-            $metaStatement = $this->connection->prepare('insert into profiles_meta(profile_id, meta) VALUES(:id, :meta)');
-            $metaStatement->execute([
-                'id'        => $id,
-                'meta'      => json_encode($data['meta']),
-            ]);
-
             $infoStatement = $this->connection->prepare('
 insert into profiles_info(
     id, url, request_time, method, main_ct, main_wt, main_cpu, main_mu, main_pmu, application, version, branch,controller, action, remote_addr, session_id 
@@ -78,6 +66,19 @@ insert into profiles_info(
 
                 'remote_addr'   => !empty($data['meta']['SERVER']['REMOTE_ADDR'])   ? $data['meta']['SERVER']['REMOTE_ADDR'] : null,
             ]);
+
+            $profileStatement = $this->connection->prepare('insert into profiles(profile_id, profiles) VALUES(:id, :profiles)');
+            $profileStatement->execute([
+                'id'        => $id,
+                'profiles'  => json_encode($data['profile']),
+            ]);
+
+            $metaStatement = $this->connection->prepare('insert into profiles_meta(profile_id, meta) VALUES(:id, :meta)');
+            $metaStatement->execute([
+                'id'        => $id,
+                'meta'      => json_encode($data['meta']),
+            ]);
+
             $this->connection->commit();
 
             return true;
