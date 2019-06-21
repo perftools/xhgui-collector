@@ -136,6 +136,10 @@ class Xhgui_Util
         if (!empty($data['id'])) {
             return $data['id'];
         }
+        // mongo compatibility
+        if (!empty($data['_id'])) {
+            return $data['_id'];
+        }
 
         if ($useRequestId) {
             foreach(['REQUEST_ID', 'HTTP_REQUEST_ID', 'HTTP_X_REQUEST_ID', 'X_CORRELATION_ID', 'HTTP_X_CORRELATION_ID'] as $header) {

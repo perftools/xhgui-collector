@@ -74,7 +74,7 @@ insert into profiles_info(
                 'controller'    => !empty($data['meta']['controller'])              ? $data['meta']['controller']   : null,
                 'action'        => !empty($data['meta']['action'])                  ? $data['meta']['action']       : null,
                 'session_id'    => !empty($data['meta']['session_id'])              ? $data['meta']['action']       : null,
-                'method'        => !empty($data['meta']['method'])                  ? $data['meta']['method']       : null,
+                'method'        => !empty($data['meta']['method'])                  ? $data['meta']['method']       : Xhgui_Util::getMethod(),
 
                 'remote_addr'   => !empty($data['meta']['SERVER']['REMOTE_ADDR'])   ? $data['meta']['SERVER']['REMOTE_ADDR'] : null,
             ]);
