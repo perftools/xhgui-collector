@@ -35,7 +35,7 @@ class Xhgui_Saver_PDO implements \Xhgui_Saver_Interface {
         $this->connection->beginTransaction();
 
         try {
-            $id = Xhgui_Util::getId(true);
+            $id = Xhgui_Util::getId($data);
 
             $requestTime = \DateTime::createFromFormat('U u', $data['meta']['request_ts_micro']['sec'].' '.$data['meta']['request_ts_micro']['usec']);
 
@@ -57,23 +57,26 @@ insert into profiles_info(
 ) values (
     :id, :url, :request_time, :method, :main_ct, :main_wt, :main_cpu, :main_mu, :main_pmu, :application, :version, :branch, :controller, :action, :remote_addr, :session_id          
 )');
+
+            // get some data from meta and save in separate column to make it easier to search/filter
             $infoStatement->execute([
                 'id'            => $id,
                 'url'           => $data['meta']['simple_url'],
                 'request_time'  => $requestTime->format('Y-m-d H:i:s.u'),
-                'method'        => (php_sapi_name()==='cli' ? 'CLI' : $_SERVER['REQUEST_METHOD']),
                 'main_ct'       => $data['profile']['main()']['ct'],
                 'main_wt'       => $data['profile']['main()']['wt'],
                 'main_cpu'      => $data['profile']['main()']['cpu'],
                 'main_mu'       => $data['profile']['main()']['mu'],
                 'main_pmu'      => $data['profile']['main()']['pmu'],
-                'application'   => !empty($data['meta']['application']) ? $data['meta']['application'] : null,
-                'version'       => !empty($data['meta']['version'])     ? $data['meta']['version'] : null,
-                'branch'        => !empty($data['meta']['branch'])      ? $data['meta']['branch'] : null,
-                'controller'    => !empty($data['meta']['controller'])  ? $data['meta']['controller'] : null,
-                'action'        => !empty($data['meta']['action'])      ? $data['meta']['action'] : null,
-                'session_id'    => !empty($data['meta']['session_id'])  ? $data['meta']['action'] : null,
-                'remote_addr'   => !empty($data['meta']['SERVER']['REMOTE_ADDR']) ?: null,
+                'application'   => !empty($data['meta']['application'])             ? $data['meta']['application']  : null,
+                'version'       => !empty($data['meta']['version'])                 ? $data['meta']['version']      : null,
+                'branch'        => !empty($data['meta']['branch'])                  ? $data['meta']['branch']       : null,
+                'controller'    => !empty($data['meta']['controller'])              ? $data['meta']['controller']   : null,
+                'action'        => !empty($data['meta']['action'])                  ? $data['meta']['action']       : null,
+                'session_id'    => !empty($data['meta']['session_id'])              ? $data['meta']['action']       : null,
+                'method'        => !empty($data['meta']['method'])                  ? $data['meta']['method']       : null,
+
+                'remote_addr'   => !empty($data['meta']['SERVER']['REMOTE_ADDR'])   ? $data['meta']['SERVER']['REMOTE_ADDR'] : null,
             ]);
             $this->connection->commit();
 

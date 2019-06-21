@@ -124,12 +124,19 @@ class Xhgui_Util
      * By default this method will try to re-use request id from http server.
      * This is needed for some storage engines that don't have string/hashlike id generation.
      *
+     * @param array $data
      * @param bool $useRequestId
      *
      * @return string
      */
-    public static function getId($useRequestId = true)
+    public static function getId(array $data = [], $useRequestId = true)
     {
+
+        // in some cases, like during import, we might already have id
+        if (!empty($data['id'])) {
+            return $data['id'];
+        }
+
         if ($useRequestId) {
             foreach(['REQUEST_ID', 'HTTP_REQUEST_ID', 'HTTP_X_REQUEST_ID', 'X_CORRELATION_ID', 'HTTP_X_CORRELATION_ID'] as $header) {
                 if (array_key_exists($header, $_SERVER) !== false) {
@@ -144,7 +151,7 @@ class Xhgui_Util
                 return bin2hex(random_bytes(16));
             } catch (\Exception $e) {
                 // entropy source is not available
-            }
+        }
         }
 
         // try openssl. For purpose of this id we can ignore info if this value is strong or not
@@ -155,5 +162,20 @@ class Xhgui_Util
 
         // fallback to most generic method. Make sure it has 32 characters :)
         return md5(uniqid('xhgui', true).microtime());
+    }
+
+
+    /**
+     * @param array $data
+     * @return mixed|string
+     */
+    public static function getMethod() {
+        if(PHP_SAPI ==='cli') {
+            return 'CLI';
+        }
+        if (!empty($_SERVER['REQUEST_METHOD'])) {
+            return $_SERVER['REQUEST_METHOD'];
+        }
+        return 'UNKNOWN';
     }
 }
