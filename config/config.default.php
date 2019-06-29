@@ -14,21 +14,16 @@ return array(
 
     // For file
     //'save.handler'                    => 'file',
-    //'save.handler.filename'           => dirname(__DIR__) . '/cache/' . 'xhgui.data.' . microtime(true) . '_' . substr(md5($_SERVER['REQUEST_URI']), 0, 6),
+    //'save.handler.filename'           => Xhgui_Saver_File::getFilename(__DIR__),
     //'save.handler.separate_meta'      => false,
     //'save.handler.meta_serializer'    => 'php',
 
-    // serialize handler for all compatible data: json, serialize, igbinary. This affects only serialization to files
+    // serialize handler for all compatible data: json, igbinary. This affects only serialization to files
     // because mongo handler and db handlers use json for native database support.
     // Defaults to json. Best performance: 'php'
     //'save.handler.serializer'        => 'json',
 
-    // to make output compatible with old xhprof gui set
-    //      save.handler.serializer     to serialize,
-    //      save.handler.separate_meta  to true
-    //      save.handler.filename       to dirname(__DIR__).'/cache/' . \Xhgui_Util::getXHProfFileName . '.data.xhprof'
-
-    // for best performance it is recommended to use separate meta file and php serializer.
+    // for best performance it is recommended to use separate meta file and php as serializer.
 
     // For upload
     // Saving profile data by upload is only recommended with HTTPS
@@ -58,7 +53,10 @@ return array(
 
     // Allows you to pass additional options like replicaSet to MongoClient or pdo settings.
     'db.options' => array(),
-
+    'run.view.filter.names' => array(
+        'Zend*',
+        'Composer*',
+    ),
     // store extra data in profile information, for example information about db queries
     //'additional_data'    => ['DB_PROFILE']
 

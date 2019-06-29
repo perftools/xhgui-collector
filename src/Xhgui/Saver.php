@@ -18,7 +18,6 @@ class Xhgui_Saver
     public static function factory($config)
     {
         switch ($config['save.handler']) {
-
             case 'file':
                 return new Xhgui_Saver_File(
                     $config['save.handler.filename'],
@@ -69,7 +68,8 @@ class Xhgui_Saver
      * @throws MongoConnectionException
      * @throws MongoException
      */
-    public function create($config){
+    public function create($config)
+    {
         return self::factory($config);
     }
 }

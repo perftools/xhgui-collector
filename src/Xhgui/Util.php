@@ -24,20 +24,6 @@ class Xhgui_Util
     }
 
     /**
-     * @return string
-     */
-    public static function getXHProfFileName()
-    {
-        if (empty($_SERVER['REQUEST_TIME_FLOAT'])) {
-            $t = explode('.', microtime(true));
-        } else {
-            $t = explode('.', $_SERVER['REQUEST_TIME_FLOAT']);
-        }
-        // join float part to main part and pad it to make every filename same length
-        return $t[1].str_pad($t[2], 4, 0, STR_PAD_RIGHT).'.data.xhprof';
-    }
-
-    /**
      * Serialize data for storage
      *
      * @param      $data
@@ -67,42 +53,6 @@ class Xhgui_Util
             case 'php':
             case 'var_export':
                 return "<?php \n".var_export($data, true);
-                break;
-        }
-    }
-
-    /**
-     * @param      $data
-     * @param bool $profiles
-     *
-     * @return false|string
-     */
-    public static function getDataFromStorage($data, $profiles = true)
-    {
-        if ($profiles) {
-            $serializer = Xhgui_Config::read('save.handler.serializer', 'json');
-        } else {
-            $serializer = Xhgui_Config::read('save.handler.meta_serializer', 'php');
-        }
-
-        switch ($serializer) {
-            case 'json':
-                return json_decode($data, true);
-                break;
-
-            case 'igbinary_serialize':
-            case 'igbinary_unserialize':
-            case 'igbinary':
-                return igbinary_unserialize($data);
-                break;
-
-                // this is a path to a file on disk
-            case 'php':
-            case 'var_export':
-                if (file_exists($data) && is_readable($data)) {
-                    return include $data;
-                }
-                throw new \RuntimeException('You must provide path to a file for php data import');
                 break;
         }
     }
