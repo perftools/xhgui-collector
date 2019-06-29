@@ -52,15 +52,17 @@ class Xhgui_Saver_File implements Xhgui_Saver_Interface
 
     /**
      * Get filename to use to store data
+     * @param string $dir
+     * @return string
      */
-    public static function getFilename() {
+    public static function getFilename($dir = '.') {
 
         $fileNamePattern = '';
 
         if (empty($_SERVER['REQUEST_URI'])) {
             if (version_compare(PHP_VERSION, '7.0.0') >= 0) {
                 try {
-                    $fileNamePattern = dirname(__DIR__) .
+                    $fileNamePattern = dirname($dir) .
                         '/cache/xhgui.data.' .
                         microtime(true) .
                         bin2hex(random_bytes(5));
@@ -72,21 +74,21 @@ class Xhgui_Saver_File implements Xhgui_Saver_Interface
                 function_exists('openssl_random_pseudo_bytes') &&
                 $b = openssl_random_pseudo_bytes(5, $strong)
             ) {
-                $fileNamePattern = dirname(__DIR__) .
+                $fileNamePattern = dirname($dir) .
                     '/cache/xhgui.data.' .
                     microtime(true).
                     bin2hex($b);
             }
 
             if (empty($fileNamePattern)) {
-                $fileNamePattern = dirname(__DIR__) .
+                $fileNamePattern = dirname($dir) .
                     '/cache/xhgui.data.' .
                     microtime(true).
                     getmypid().
                     uniqid('last_resort_unique_string', true);
             }
         } else {
-            $fileNamePattern = dirname(__DIR__) .
+            $fileNamePattern = dirname($dir) .
                 '/cache/xhgui.data.' .
                 microtime(true).
                 substr(md5($_SERVER['REQUEST_URI']), 0, 10);
