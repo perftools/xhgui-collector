@@ -57,9 +57,6 @@ class Xhgui_Util
             case 'json':
                 return json_encode($data);
                 break;
-            case 'serialize':
-                return serialize($data);
-                break;
 
             case 'igbinary_serialize':
             case 'igbinary_unserialize':
@@ -91,14 +88,6 @@ class Xhgui_Util
         switch ($serializer) {
             case 'json':
                 return json_decode($data, true);
-                break;
-            case 'serialize':
-                if (PHP_MAJOR_VERSION > 7) {
-                    return unserialize($data, false);
-                } else {
-                    return unserialize($data);
-                }
-
                 break;
 
             case 'igbinary_serialize':
