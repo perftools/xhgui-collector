@@ -13,6 +13,7 @@ class Xhgui_Saver
      * @param array $config The configuration data.
      * @return Xhgui_Saver_Interface
      * @throws MongoConnectionException
+     * @throws MongoException
      */
     public static function factory($config)
     {
@@ -58,5 +59,17 @@ class Xhgui_Saver
                 $collection->findOne();
                 return new Xhgui_Saver_Mongo($collection);
         }
+    }
+
+    /**
+     * For usage with factory instance - for example for easier testing
+     *
+     * @param $config
+     * @return Xhgui_Saver_Interface
+     * @throws MongoConnectionException
+     * @throws MongoException
+     */
+    public function create($config){
+        return self::factory($config);
     }
 }
