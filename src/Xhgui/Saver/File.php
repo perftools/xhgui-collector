@@ -49,4 +49,49 @@ class Xhgui_Saver_File implements Xhgui_Saver_Interface
         $json = Xhgui_Util::getDataForStorage($data);
         return file_put_contents($this->file, $json.PHP_EOL, FILE_APPEND);
     }
+
+    /**
+     * Get filename to use to store data
+     */
+    public static function getFilename() {
+
+        $fileNamePattern = '';
+
+        if (empty($_SERVER['REQUEST_URI'])) {
+            if (version_compare(PHP_VERSION, '7.0.0') >= 0) {
+                try {
+                    $fileNamePattern = dirname(__DIR__) .
+                        '/cache/xhgui.data.' .
+                        microtime(true) .
+                        bin2hex(random_bytes(5));
+                } catch (Exception $e) {
+                }
+            }
+
+            if (empty($fileNamePattern) &&
+                function_exists('openssl_random_pseudo_bytes') &&
+                $b = openssl_random_pseudo_bytes(5, $strong)
+            ) {
+                $fileNamePattern = dirname(__DIR__) .
+                    '/cache/xhgui.data.' .
+                    microtime(true).
+                    bin2hex($b);
+            }
+
+            if (empty($fileNamePattern)) {
+                $fileNamePattern = dirname(__DIR__) .
+                    '/cache/xhgui.data.' .
+                    microtime(true).
+                    getmypid().
+                    uniqid('last_resort_unique_string', true);
+            }
+        } else {
+            $fileNamePattern = dirname(__DIR__) .
+                '/cache/xhgui.data.' .
+                microtime(true).
+                substr(md5($_SERVER['REQUEST_URI']), 0, 10);
+        }
+
+        return $fileNamePattern;
+    }
 }
