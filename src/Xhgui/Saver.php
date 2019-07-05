@@ -20,7 +20,8 @@ class Xhgui_Saver
         switch ($config['save.handler']) {
             case 'file':
                 return new Xhgui_Saver_File(
-                    $config['save.handler.filename'],
+                    $config['save.handler.path'],
+                    !empty($config['save.handler.filename']) ? $config['save.handler.filename'] : null,
                     $config['save.handler.separate_meta']
                 );
 

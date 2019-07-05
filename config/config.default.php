@@ -14,11 +14,13 @@ return array(
 
     // For file
     //'save.handler'                    => 'file',
+    //'save.handler.path'               => '/data/profiles/',
+    // provide name to save current run to, or leave empty for default pattern
     //'save.handler.filename'           => Xhgui_Saver_File::getFilename(__DIR__),
     //'save.handler.separate_meta'      => false,
     //'save.handler.meta_serializer'    => 'php',
 
-    // serialize handler for all compatible data: json, igbinary. This affects only serialization to files
+    // serialize handler for all compatible data: json, igbinary, php. This affects only serialization to files
     // because mongo handler and db handlers use json for native database support.
     // Defaults to json. Best performance: 'php'
     //'save.handler.serializer'        => 'json',
@@ -37,9 +39,9 @@ return array(
 
 
     // For MongoDB
-    //'save.handler'  => 'mongodb',
-    //'db.host'       => 'mongodb://127.0.0.1:27017',
-    //'db.db'         => getenv('XHGUI_MONGO_DB') ?: 'xhprof',
+    'save.handler'  => 'mongodb',
+    'db.host'       => 'mongodb://127.0.0.1:27017',
+    'db.db'         => getenv('XHGUI_MONGO_DB') ?: 'xhprof',
 
 
     // for PDO
