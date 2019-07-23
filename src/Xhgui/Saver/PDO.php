@@ -41,15 +41,16 @@ class Xhgui_Saver_PDO implements \Xhgui_Saver_Interface {
 
             $infoStatement = $this->connection->prepare('
 insert into profiles_info(
-    id, url, request_time, method, main_ct, main_wt, main_cpu, main_mu, main_pmu, application, version, branch,controller, action, remote_addr, session_id 
+    id, url, simple_url, request_time, method, main_ct, main_wt, main_cpu, main_mu, main_pmu, application, version, branch,controller, action, remote_addr, session_id 
 ) values (
-    :id, :url, :request_time, :method, :main_ct, :main_wt, :main_cpu, :main_mu, :main_pmu, :application, :version, :branch, :controller, :action, :remote_addr, :session_id          
+    :id, :url, :simple_url, :request_time, :method, :main_ct, :main_wt, :main_cpu, :main_mu, :main_pmu, :application, :version, :branch, :controller, :action, :remote_addr, :session_id          
 )');
 
             // get some data from meta and save in separate column to make it easier to search/filter
             $infoStatement->execute([
                 'id'            => $id,
-                'url'           => $data['meta']['simple_url'],
+                'url'           => $data['meta']['url'],
+                'simple_url'    => $data['meta']['simple_url'],
                 'request_time'  => $requestTime->format('Y-m-d H:i:s.u'),
                 'main_ct'       => $data['profile']['main()']['ct'],
                 'main_wt'       => $data['profile']['main()']['wt'],
