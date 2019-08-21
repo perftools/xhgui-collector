@@ -69,7 +69,7 @@ class Xhgui_Saver_File implements Xhgui_Saver_Interface
         $prefix = 'xhgui.data.'.microtime(true);
         
         if (empty($_SERVER['REQUEST_URI'])) {
-            if (version_compare(PHP_VERSION, '7.0.0') >= 0) {
+            if (PHP_VERSION_ID >= 70000) {
                 try {
                     $fileNamePattern = $prefix.bin2hex(random_bytes(5));
                 } catch (Exception $e) {
