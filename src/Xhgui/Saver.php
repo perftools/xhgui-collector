@@ -36,7 +36,7 @@ class Xhgui_Saver
                 );
 
             case 'pdo':
-                return new Xhgui_Saver_PDO(
+                return new Xhgui_Saver_Pdo(
                     $config['db.dsn'],
                     (!empty($config['db.user'])) ? $config['db.user'] : null,
                     (!empty($config['db.password'])) ? $config['db.password'] : null,
@@ -49,10 +49,10 @@ class Xhgui_Saver
                 $mongo = new MongoClient(
                     $config['db.host'],
                     $config['db.options'] +
-                    [
+                    array(
                         'username' => (!empty($config['db.user'])) ? $config['db.user'] : null,
                         'password' => (!empty($config['db.password'])) ? $config['db.password'] : null,
-                    ]
+                    )
                 );
 
                 $collection = $mongo->{$config['db.db']}->results;

@@ -138,7 +138,7 @@ register_shutdown_function(
 
         // store session id before we close it:
         $sessionId = null;
-        if (session_status() === PHP_SESSION_ACTIVE) {
+        if (session_id() !== '') {
             $sessionId = session_id();
         }
 

@@ -68,7 +68,7 @@ class Xhgui_Util
      *
      * @return string
      */
-    public static function getId(array $data = [], $useRequestId = true)
+    public static function getId(array $data = array(), $useRequestId = true)
     {
 
         // in some cases, like during import, we might already have id

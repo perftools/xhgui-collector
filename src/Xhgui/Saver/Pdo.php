@@ -2,7 +2,7 @@
 /**
  * PDO handler to save profiler data
  */
-class Xhgui_Saver_PDO implements \Xhgui_Saver_Interface {
+class Xhgui_Saver_Pdo implements \Xhgui_Saver_Interface {
 
     /**
      * @var \PDO
@@ -17,7 +17,7 @@ class Xhgui_Saver_PDO implements \Xhgui_Saver_Interface {
      * @param string $password
      * @param array  $options
      */
-    public function __construct($dsn, $userName, $password, $options = [])
+    public function __construct($dsn, $userName, $password, $options = array())
     {
         $this->connection = new \PDO($dsn, $userName, $password, $options);
         $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

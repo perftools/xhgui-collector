@@ -1,5 +1,5 @@
 {
-    "name": "grzegorzdrozd/xhgui-collector",
+    "name": "perftools/xhgui-collector",
     "description": "Library for collecting and storing XHProf results for later use by XHGUI.",
     "authors": [
         {
@@ -23,7 +23,7 @@
         "ext-mongo": "Mongo is needed to store profiler results for PHP < 7.",
         "ext-mongodb": "Mongo is needed to store profiler results for PHP > 7.",
         "ext-curl": "You need to install the curl extension to upload saved files",
-        "ext-json": "You ned json extension to work with json on some linux systems",
+        "ext-json": "You need json extension to work with json on some linux systems",
         "ext-pdo": "You need pdo extension with correct database driver loaded to work with PDO",
         "alcaeus/mongo-php-adapter": "Mongo PHP Adapter is required for PHP >7 (when using ext-mongodb)"
     }
