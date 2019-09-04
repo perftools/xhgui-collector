@@ -4,6 +4,9 @@
  */
 class Xhgui_Config
 {
+    /**
+     * @var array
+     */
     private static $_config = array();
 
     /**
@@ -23,14 +26,15 @@ class Xhgui_Config
      * Read a config value.
      *
      * @param string $name The name of the config variable
+     * @param null $default
      * @return The value or null.
      */
-    public static function read($name)
+    public static function read($name, $default = null)
     {
         if (isset(self::$_config[$name])) {
             return self::$_config[$name];
         }
-        return null;
+        return $default;
     }
 
     /**

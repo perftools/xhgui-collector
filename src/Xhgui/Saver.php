@@ -12,6 +12,8 @@ class Xhgui_Saver
      *
      * @param array $config The configuration data.
      * @return Xhgui_Saver_Interface
+     * @throws MongoConnectionException
+     * @throws MongoException
      */
     public static function factory($config)
     {

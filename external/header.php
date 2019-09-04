@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUndefinedFunctionInspection */ // ignore undefined function from profiling extensions
+/** @noinspection PhpUndefinedConstantInspection */ // ignore undefined constants from profiling extensions
 /* Things you may want to tweak in here:
  *  - xhprof_enable() uses a few constants.
  *  - The values passed to rand() determine the the odds of any particular run being profiled.
@@ -71,6 +73,7 @@ if (!extension_loaded('xhprof')
 // autoloaders.
 $dir = dirname(__DIR__);
 require_once $dir . '/src/Xhgui/Config.php';
+
 $configDir = defined('XHGUI_CONFIG_DIR') ? XHGUI_CONFIG_DIR : $dir . '/config/';
 if (file_exists($configDir . 'config.php')) {
     Xhgui_Config::load($configDir . 'config.php');
@@ -81,6 +84,11 @@ unset($dir, $configDir);
 
 if ((!extension_loaded('mongo') && !extension_loaded('mongodb')) && Xhgui_Config::read('save.handler') === 'mongodb') {
     error_log('xhgui - extension mongo not loaded');
+    return;
+}
+
+if (!extension_loaded('PDO') && Xhgui_Config::read('save.handler') === 'pdo') {
+    error_log('xhgui - extension pdo not loaded');
     return;
 }
 
@@ -95,27 +103,36 @@ if (!isset($_SERVER['REQUEST_TIME_FLOAT'])) {
 $options = Xhgui_Config::read('profiler.options');
 if (extension_loaded('uprofiler')) {
     uprofiler_enable(UPROFILER_FLAGS_CPU | UPROFILER_FLAGS_MEMORY, $options);
+
 } else if (extension_loaded('tideways')) {
     tideways_enable(TIDEWAYS_FLAGS_CPU | TIDEWAYS_FLAGS_MEMORY | TIDEWAYS_FLAGS_NO_SPANS, $options);
+
 } elseif (extension_loaded('tideways_xhprof')) {
     tideways_xhprof_enable(TIDEWAYS_XHPROF_FLAGS_CPU | TIDEWAYS_XHPROF_FLAGS_MEMORY);
+
 } else {
     if (PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION > 4) {
         xhprof_enable(XHPROF_FLAGS_CPU | XHPROF_FLAGS_MEMORY | XHPROF_FLAGS_NO_BUILTINS, $options);
+
     } else {
         xhprof_enable(XHPROF_FLAGS_CPU | XHPROF_FLAGS_MEMORY, $options);
+
     }
 }
 
 register_shutdown_function(
     function () {
         if (extension_loaded('uprofiler')) {
+
             $data['profile'] = uprofiler_disable();
         } else if (extension_loaded('tideways')) {
+
             $data['profile'] = tideways_disable();
         } elseif (extension_loaded('tideways_xhprof')) {
+
             $data['profile'] = tideways_xhprof_disable();
         } else {
+
             $data['profile'] = xhprof_disable();
         }
 
@@ -161,8 +178,8 @@ register_shutdown_function(
             $requestTimeFloat[1] = 0;
         }
 
-        $requestTs = array('sec' => $time, 'usec' => 0);
-        $requestTsMicro = array('sec' => $requestTimeFloat[0], 'usec' => $requestTimeFloat[1]);
+        $requestTs      = array('sec' => $time,                 'usec' => 0);
+        $requestTsMicro = array('sec' => $requestTimeFloat[0],  'usec' => $requestTimeFloat[1]);
 
         $data['meta'] = array(
             'url' => $uri,
@@ -180,6 +197,7 @@ register_shutdown_function(
             $config += array('db.options' => array());
             $saver = Xhgui_Saver::factory($config);
             $saver->save($data);
+
         } catch (Exception $e) {
             error_log('xhgui - ' . $e->getMessage());
         }

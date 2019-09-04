@@ -78,6 +78,13 @@ SQL;
         $this->stmt = $pdo->prepare(sprintf(self::INSERT_DML, $table));
     }
 
+    /**
+     * Save data in sql database.
+     *
+     * @param array $data
+     *
+     * @return bool
+     */
     public function save(array $data)
     {
         $main = $data['profile']['main()'];

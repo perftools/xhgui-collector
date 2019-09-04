@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Common utilities
+ */
 class Xhgui_Util
 {
     /**
