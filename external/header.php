@@ -73,7 +73,6 @@ if (!extension_loaded('xhprof')
 // autoloaders.
 $dir = dirname(__DIR__);
 require_once $dir . '/src/Xhgui/Config.php';
-
 $configDir = defined('XHGUI_CONFIG_DIR') ? XHGUI_CONFIG_DIR : $dir . '/config/';
 if (file_exists($configDir . 'config.php')) {
     Xhgui_Config::load($configDir . 'config.php');
@@ -87,7 +86,7 @@ if ((!extension_loaded('mongo') && !extension_loaded('mongodb')) && Xhgui_Config
     return;
 }
 
-if (!extension_loaded('PDO') && Xhgui_Config::read('save.handler') === 'pdo') {
+if (Xhgui_Config::read('save.handler') === 'pdo' && !extension_loaded('PDO')) {
     error_log('xhgui - extension pdo not loaded');
     return;
 }
@@ -103,36 +102,27 @@ if (!isset($_SERVER['REQUEST_TIME_FLOAT'])) {
 $options = Xhgui_Config::read('profiler.options');
 if (extension_loaded('uprofiler')) {
     uprofiler_enable(UPROFILER_FLAGS_CPU | UPROFILER_FLAGS_MEMORY, $options);
-
 } else if (extension_loaded('tideways')) {
     tideways_enable(TIDEWAYS_FLAGS_CPU | TIDEWAYS_FLAGS_MEMORY | TIDEWAYS_FLAGS_NO_SPANS, $options);
-
 } elseif (extension_loaded('tideways_xhprof')) {
     tideways_xhprof_enable(TIDEWAYS_XHPROF_FLAGS_CPU | TIDEWAYS_XHPROF_FLAGS_MEMORY);
-
 } else {
     if (PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION > 4) {
         xhprof_enable(XHPROF_FLAGS_CPU | XHPROF_FLAGS_MEMORY | XHPROF_FLAGS_NO_BUILTINS, $options);
-
     } else {
         xhprof_enable(XHPROF_FLAGS_CPU | XHPROF_FLAGS_MEMORY, $options);
-
     }
 }
 
 register_shutdown_function(
     function () {
         if (extension_loaded('uprofiler')) {
-
             $data['profile'] = uprofiler_disable();
         } else if (extension_loaded('tideways')) {
-
             $data['profile'] = tideways_disable();
         } elseif (extension_loaded('tideways_xhprof')) {
-
             $data['profile'] = tideways_xhprof_disable();
         } else {
-
             $data['profile'] = xhprof_disable();
         }
 
@@ -184,26 +174,26 @@ register_shutdown_function(
             $requestTimeFloat[1] = 0;
         }
 
-        $requestTs      = array('sec' => $time,                 'usec' => 0);
-        $requestTsMicro = array('sec' => $requestTimeFloat[0],  'usec' => $requestTimeFloat[1]);
+        $requestTs = array('sec' => $time, 'usec' => 0);
+        $requestTsMicro = array('sec' => $requestTimeFloat[0], 'usec' => $requestTimeFloat[1]);
 
         $data['meta'] = array(
-            'url'               => $uri,
-            'SERVER'            => $_SERVER,
-            'get'               => $_GET,
-            'env'               => $_ENV,
-            'session_id'        => $sessionId,
-            'simple_url'        => Xhgui_Util::simpleUrl($uri),
-            'request_ts'        => $requestTs,
-            'request_ts_micro'  => $requestTsMicro,
-            'request_date'      => date('Y-m-d', $time),
-            'application'       => !empty($GLOBALS['xhgui']['application']) ? $GLOBALS['xhgui']['application']  : null,
-            'version'           => !empty($GLOBALS['xhgui']['version'])     ? $GLOBALS['xhgui']['version']      : null,
-            'branch'            => !empty($GLOBALS['xhgui']['branch'])      ? $GLOBALS['xhgui']['branch']       : null,
-            'controller'        => !empty($GLOBALS['xhgui']['controller'])  ? $GLOBALS['xhgui']['controller']   : null,
-            'action'            => !empty($GLOBALS['xhgui']['action'])      ? $GLOBALS['xhgui']['action']       : null,
-            'method'            => Xhgui_Util::getMethod(),
-            'cookies'           => $_COOKIE,
+            'url' => $uri,
+            'SERVER' => $_SERVER,
+            'get' => $_GET,
+            'env' => $_ENV,
+            'session_id' => $sessionId,
+            'simple_url' => Xhgui_Util::simpleUrl($uri),
+            'request_ts' => $requestTs,
+            'request_ts_micro' => $requestTsMicro,
+            'request_date'=> date('Y-m-d', $time),
+            'application' => !empty($GLOBALS['xhgui']['application']) ? $GLOBALS['xhgui']['application'] : null,
+            'version' => !empty($GLOBALS['xhgui']['version']) ? $GLOBALS['xhgui']['version'] : null,
+            'branch' => !empty($GLOBALS['xhgui']['branch']) ? $GLOBALS['xhgui']['branch'] : null,
+            'controller' => !empty($GLOBALS['xhgui']['controller']) ? $GLOBALS['xhgui']['controller'] : null,
+            'action' => !empty($GLOBALS['xhgui']['action']) ? $GLOBALS['xhgui']['action'] : null,
+            'method' => Xhgui_Util::getMethod(),
+            'cookies' => $_COOKIE,
         );
 
         // add additional information to saved profile data - for example db queries or similar
@@ -221,7 +211,6 @@ register_shutdown_function(
             $config += array('db.options' => array());
             $saver = Xhgui_Saver::factory($config);
             $saver->save($data);
-
         } catch (Exception $e) {
             error_log('xhgui - ' . $e->getMessage());
         }

@@ -28,9 +28,9 @@ class Xhgui_Saver_File implements Xhgui_Saver_Interface
      */
     public function __construct($path, $file, $separateMeta = false)
     {
-        $this->path             = rtrim($path, '/\\').DIRECTORY_SEPARATOR;
-        $this->file             = !empty($file) ? $file : self::getFilename();
-        $this->separateMeta     = $separateMeta;
+        $this->path = rtrim($path, '/\\').DIRECTORY_SEPARATOR;
+        $this->file = !empty($file) ? $file : self::getFilename();
+        $this->separateMeta = $separateMeta;
     }
 
     /**
@@ -40,13 +40,13 @@ class Xhgui_Saver_File implements Xhgui_Saver_Interface
     public function save(array $data)
     {
         if ($this->separateMeta) {
-            $profiles           = Xhgui_Util::getDataForStorage($data['profile'], true);
+            $profiles = Xhgui_Util::getDataForStorage($data['profile'], true);
 
-            $meta               = $data['meta'];
+            $meta = $data['meta'];
 
             // store summary in separate meta file to speed up aggregation
-            $meta['summary']    = $data['profile']['main()'];
-            $meta               = Xhgui_Util::getDataForStorage($meta, false);
+            $meta['summary'] = $data['profile']['main()'];
+            $meta = Xhgui_Util::getDataForStorage($meta, false);
 
             file_put_contents($this->path.$this->file.'.meta',$meta.PHP_EOL, FILE_APPEND);
 

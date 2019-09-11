@@ -47,38 +47,37 @@ insert into profiles_info(
 )');
 
             // get some data from meta and save in separate column to make it easier to search/filter
-            $infoStatement->execute([
-                'id'            => $id,
-                'url'           => $data['meta']['url'],
-                'simple_url'    => $data['meta']['simple_url'],
-                'request_time'  => $requestTime->format('Y-m-d H:i:s.u'),
-                'main_ct'       => $data['profile']['main()']['ct'],
-                'main_wt'       => $data['profile']['main()']['wt'],
-                'main_cpu'      => $data['profile']['main()']['cpu'],
-                'main_mu'       => $data['profile']['main()']['mu'],
-                'main_pmu'      => $data['profile']['main()']['pmu'],
-                'application'   => !empty($data['meta']['application'])             ? $data['meta']['application']  : null,
-                'version'       => !empty($data['meta']['version'])                 ? $data['meta']['version']      : null,
-                'branch'        => !empty($data['meta']['branch'])                  ? $data['meta']['branch']       : null,
-                'controller'    => !empty($data['meta']['controller'])              ? $data['meta']['controller']   : null,
-                'action'        => !empty($data['meta']['action'])                  ? $data['meta']['action']       : null,
-                'session_id'    => !empty($data['meta']['session_id'])              ? $data['meta']['action']       : null,
-                'method'        => !empty($data['meta']['method'])                  ? $data['meta']['method']       : Xhgui_Util::getMethod(),
-
-                'remote_addr'   => !empty($data['meta']['SERVER']['REMOTE_ADDR'])   ? $data['meta']['SERVER']['REMOTE_ADDR'] : null,
-            ]);
+            $infoStatement->execute(array(
+                'id' => $id,
+                'url'=> $data['meta']['url'],
+                'simple_url' => $data['meta']['simple_url'],
+                'request_time' => $requestTime->format('Y-m-d H:i:s.u'),
+                'main_ct'=> $data['profile']['main()']['ct'],
+                'main_wt'=> $data['profile']['main()']['wt'],
+                'main_cpu' => $data['profile']['main()']['cpu'],
+                'main_mu'=> $data['profile']['main()']['mu'],
+                'main_pmu' => $data['profile']['main()']['pmu'],
+                'application'=> !empty($data['meta']['application']) ? $data['meta']['application'] : null,
+                'version'=> !empty($data['meta']['version']) ? $data['meta']['version'] : null,
+                'branch' => !empty($data['meta']['branch']) ? $data['meta']['branch'] : null,
+                'controller' => !empty($data['meta']['controller']) ? $data['meta']['controller'] : null,
+                'action' => !empty($data['meta']['action']) ? $data['meta']['action'] : null,
+                'session_id' => !empty($data['meta']['session_id']) ? $data['meta']['action'] : null,
+                'method' => !empty($data['meta']['method']) ? $data['meta']['method'] : Xhgui_Util::getMethod(),
+                'remote_addr' => !empty($data['meta']['SERVER']['REMOTE_ADDR']) ? $data['meta']['SERVER']['REMOTE_ADDR'] : null,
+            ));
 
             $profileStatement = $this->connection->prepare('insert into profiles(profile_id, profiles) VALUES(:id, :profiles)');
-            $profileStatement->execute([
-                'id'        => $id,
-                'profiles'  => json_encode($data['profile']),
-            ]);
+            $profileStatement->execute(array(
+                'id' => $id,
+                'profiles' => json_encode($data['profile']),
+            ));
 
             $metaStatement = $this->connection->prepare('insert into profiles_meta(profile_id, meta) VALUES(:id, :meta)');
-            $metaStatement->execute([
-                'id'        => $id,
-                'meta'      => json_encode($data['meta']),
-            ]);
+            $metaStatement->execute(array(
+                'id' => $id,
+                'meta' => json_encode($data['meta']),
+            ));
 
             $this->connection->commit();
 

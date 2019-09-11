@@ -82,7 +82,7 @@ class Xhgui_Util
         }
 
         if ($useRequestId) {
-            foreach(['REQUEST_ID', 'HTTP_REQUEST_ID', 'HTTP_X_REQUEST_ID', 'X_CORRELATION_ID', 'HTTP_X_CORRELATION_ID'] as $header) {
+            foreach(array('REQUEST_ID', 'HTTP_REQUEST_ID', 'HTTP_X_REQUEST_ID', 'X_CORRELATION_ID', 'HTTP_X_CORRELATION_ID') as $header) {
                 if (array_key_exists($header, $_SERVER) !== false) {
                     return $_SERVER[$header];
                 }

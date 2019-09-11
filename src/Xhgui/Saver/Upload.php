@@ -23,8 +23,8 @@ class Xhgui_Saver_Upload implements Xhgui_Saver_Interface
      */
     public function __construct($uri, $timeout)
     {
-        $this->uri      = $uri;
-        $this->timeout  = $timeout;
+        $this->uri = $uri;
+        $this->timeout = $timeout;
     }
 
     /**
