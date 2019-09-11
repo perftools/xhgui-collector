@@ -64,9 +64,9 @@ class Xhgui_Saver_File implements Xhgui_Saver_Interface
      * @throws Exception
      */
     public static function getFilename() {
-        $prefix = 'xhgui.data.'.microtime(true);
+        $fileNamePattern = 'xhgui.data.'.microtime(true);
         try {
-            $fileNamePattern = $prefix.bin2hex(random_bytes(12));
+            $fileNamePattern .= bin2hex(random_bytes(12));
         } catch (Exception $e) {
             // Should we add logging here? random_bytes from paragonie/random_compat will throw exception if
             // it is unable to get safe enough data. It will not fall back to insecure random data.
