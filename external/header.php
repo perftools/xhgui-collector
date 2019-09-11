@@ -186,7 +186,7 @@ register_shutdown_function(
             'simple_url' => Xhgui_Util::simpleUrl($uri),
             'request_ts' => $requestTs,
             'request_ts_micro' => $requestTsMicro,
-            'request_date'=> date('Y-m-d', $time),
+            'request_date' => date('Y-m-d', $time),
             'application' => !empty($GLOBALS['xhgui']['application']) ? $GLOBALS['xhgui']['application'] : null,
             'version' => !empty($GLOBALS['xhgui']['version']) ? $GLOBALS['xhgui']['version'] : null,
             'branch' => !empty($GLOBALS['xhgui']['branch']) ? $GLOBALS['xhgui']['branch'] : null,
