@@ -55,10 +55,6 @@ return array(
 
     // Allows you to pass additional options like replicaSet to MongoClient or pdo settings.
     'db.options' => array(),
-    'run.view.filter.names' => array(
-        'Zend*',
-        'Composer*',
-    ),
     // store extra data in profile information, for example information about db queries
     //'additional_data'    => ['DB_PROFILE']
 
