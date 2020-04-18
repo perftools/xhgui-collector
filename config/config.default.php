@@ -77,4 +77,6 @@ return array(
 
     // Options passed to (uprofiler|tideways|xhprof)_enable. Mainly ignored_functions list
     'profiler.options' => array(),
+
+    'profiler.skip_built_in' => false,
 );
