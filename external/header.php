@@ -144,6 +144,14 @@ register_shutdown_function(
         } else {
             $data['profile'] = xhprof_disable();
         }
+        
+        // Escape profile data keys according to the standard https://docs.mongodb.com/manual/reference/limits/#Restrictions-on-Field-Names
+        $profile = [];
+        foreach ($data['profile'] as $key => $data) {
+            $escapedKey = str_replace([".", "$"], "_", $key);
+            $profile[$escapedKey] = $data;
+        }
+        $data['profile'] = $profile;
 
         // ignore_user_abort(true) allows your PHP script to continue executing, even if the user has terminated their request.
         // Further Reading: http://blog.preinheimer.com/index.php?/archives/248-When-does-a-user-abort.html
