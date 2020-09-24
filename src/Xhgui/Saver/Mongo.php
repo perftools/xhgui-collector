@@ -23,6 +23,17 @@ class Xhgui_Saver_Mongo implements Xhgui_Saver_Interface
             $data['_id'] = self::getLastProfilingId();
         }
 
+        // Escape profile data keys according to the standard https://docs.mongodb.com/manual/reference/limits/#Restrictions-on-Field-Names
+        if (isset($data['profile'])) {
+            $profile = array();
+            foreach ($data['profile'] as $key => $value) {
+                $escapedKey = str_replace(array(".", "$"), "_", $key);
+                $profile[$escapedKey] = $value;
+            }
+            $data['profile'] = $profile;
+            unset($profile);
+        }
+
         if (isset($data['meta']['request_ts'])) {
             $data['meta']['request_ts'] = new MongoDate($data['meta']['request_ts']['sec']);
         }
